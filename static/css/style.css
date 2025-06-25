@@ -93,6 +93,157 @@ button:hover {
   font-size: 70px;
 }
 
+/* New Home Page Styles */
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #646464 0%, #555555 100%);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.hero-section h1 {
+  font-size: 3.5rem;
+  color: #fff;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: #f0f0f0;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+
+.user-welcome {
+  margin-top: 30px;
+}
+
+.user-welcome h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 25px;
+}
+
+.customer-actions, .company-actions, .guest-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #ec2f00;
+  color: white;
+  border-color: #ec2f00;
+}
+
+.btn-primary:hover {
+  background: #e02a21;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(236, 47, 0, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #ec2f00;
+  border-color: #ec2f00;
+}
+
+.btn-secondary:hover {
+  background: #ec2f00;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(236, 47, 0, 0.4);
+}
+
+.features-section {
+  margin-top: 50px;
+  padding: 30px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+}
+
+.features-section h3 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.service-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.category {
+  background: rgba(255,255,255,0.1);
+  padding: 25px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: transform 0.3s ease;
+}
+
+.category:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.category h4 {
+  color: #ec2f00;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.category li {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.category li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.category li a:hover {
+  background: #ec2f00;
+  color: white;
+  transform: scale(1.05);
+}
+
 /* ============================================================================================== */
 
 /* ======================================== Navbar ============================================== */
@@ -360,6 +511,164 @@ span {
   box-shadow: 0px 0px 23px 1px #2423213d;
   padding: 5px 10px;
   margin: 5px 0px;
+}
+
+/* ======================================== Service Cards ======================================== */
+
+.service-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.service-card h3 {
+  color: #ec2f00;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.service-card h3 a {
+  color: #ec2f00;
+  text-decoration: none;
+}
+
+.service-card h3 a:hover {
+  color: #e02a21;
+}
+
+.service-card p {
+  color: #fff;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.service-card p strong {
+  color: #f0f0f0;
+}
+
+/* ======================================== Profile Pages ======================================== */
+
+.profile-container, .login-container, .create-service-container, .request-service-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-header, .service-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
+
+.profile-header h1, .service-header h1 {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.profile-type, .service-category {
+  color: #ec2f00;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.info-grid, .detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.info-item, .detail-item {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.info-item label, .detail-item label {
+  color: #f0f0f0;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.info-item span, .detail-item span {
+  color: #fff;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ======================================== Form Improvements ======================================== */
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block !important;
+  color: #f0f0f0;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: block;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.help-text {
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: block;
+}
+
+/* ======================================== Error Pages ======================================== */
+
+.error-container {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.error-container h1 {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  background: rgba(255, 107, 107, 0.2);
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  color: #fff;
+}
+
+.error-actions {
+  margin-top: 30px;
 }
 
 /* ============================================================================================== */
