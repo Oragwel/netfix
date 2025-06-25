@@ -6,12 +6,11 @@ from users.models import Company, Customer
 class Service(models.Model):
     FIELD_CHOICES = [
         ("Air Conditioner", "Air Conditioner"),
-        ("All in One", "All in One"),
         ("Carpentry", "Carpentry"),
         ("Electricity", "Electricity"),
         ("Gardening", "Gardening"),
         ("Home Machines", "Home Machines"),
-        ("Housekeeping", "Housekeeping"),  # ✅ Fixed spelling from "House Keeping"
+        ("Housekeeping", "Housekeeping"),
         ("Interior Design", "Interior Design"),
         ("Locks", "Locks"),
         ("Painting", "Painting"),
@@ -28,17 +27,27 @@ class Service(models.Model):
 
     def clean(self):
         """
-        Validate that the service field matches the company's field of work.
-        Companies with 'All in One' field can create services in any category.
+        Validate service field restrictions:
+        1. Services cannot be categorized as 'All in One'
+        2. Service field must match company's field of work (except for 'All in One' companies)
+        3. 'All in One' companies can create services in any specific category
         """
         super().clean()
-        # Only validate if both company and field are set
-        if hasattr(self, 'company') and self.company and self.field:
-            # "All in One" companies can create services in any field
-            if self.company.field_of_work == "All in One":
-                return
 
-            # Other companies can only create services in their specific field
+        # Prevent "All in One" services - services must have specific categories
+        if self.field == "All in One":
+            raise ValidationError(
+                "Services cannot be categorized as 'All in One'. "
+                "Please choose a specific service category (e.g., Plumbing, Electricity, etc.)."
+            )
+
+        # Validate company field restrictions if both company and field are set
+        if hasattr(self, 'company') and self.company and self.field:
+            # "All in One" companies can create services in any specific field
+            if self.company.field_of_work == "All in One":
+                return  # No restrictions for All in One companies
+
+            # Specialized companies can only create services in their specific field
             if self.company.field_of_work != self.field:
                 raise ValidationError(
                     f"Your company specializes in '{self.company.field_of_work}' services. "

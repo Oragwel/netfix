@@ -42,8 +42,9 @@ class CreateNewService(forms.ModelForm):
         # Restrict field choices based on company's field of work
         if self.company:
             if self.company.field_of_work == "All in One":
-                # "All in One" companies can create services in any field except "All in One" itself
-                available_choices = [choice for choice in Service.FIELD_CHOICES if choice[0] != "All in One"]
+                # "All in One" companies can create services in any specific field
+                # (All service fields are available since "All in One" is already removed from FIELD_CHOICES)
+                available_choices = Service.FIELD_CHOICES
             else:
                 # Other companies can only create services in their specific field
                 available_choices = [(self.company.field_of_work, self.company.field_of_work)]
@@ -61,13 +62,20 @@ class CreateNewService(forms.ModelForm):
         cleaned_data = super().clean()
         field = cleaned_data.get('field')
 
+        # Prevent "All in One" services (this should not happen due to form choices, but extra safety)
+        if field == "All in One":
+            raise forms.ValidationError(
+                "Services cannot be categorized as 'All in One'. "
+                "Please choose a specific service category."
+            )
+
         if self.company and field:
-            # "All in One" companies can create services in any field except "All in One"
+            # "All in One" companies can create services in any specific field
             if self.company.field_of_work == "All in One":
-                if field == "All in One":
-                    raise forms.ValidationError("Services cannot be categorized as 'All in One'. Please choose a specific service category.")
+                # No additional restrictions for All in One companies
+                pass
             else:
-                # Other companies can only create services in their specific field
+                # Specialized companies can only create services in their specific field
                 if self.company.field_of_work != field:
                     raise forms.ValidationError(
                         f"Your company specializes in '{self.company.field_of_work}' services. "
