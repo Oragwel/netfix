@@ -1,45 +1,86 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    User Profile
+    {{ user.username }} - Company Profile
 {% endblock %}
 
 {% block content %}
-    {% if user.is_customer %}
-        <div style="display: ruby;">
-            <h1>{{ user.username }} ({{user_age}} y/o)</h1>
-            <p>{{ user.email }}</p>
-            <p style="float: right;">Customer</p>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>{{ user.username }}'s Profile</h1>
+            <p class="profile-type">Company</p>
         </div>
-    {% else %}
-        <div style="display: ruby;">
-            <h1>{{ user.username }}</h1>
-            <p> {{ user.email }}</p>
-            <p style="float: right;">{{user.company.field}} Company</p>
-        </div>
-       {% endif %}
-    {% if 'customer' in request.path %}
-        <p class="title">Previous Requested Services</p>
-    {% else %}
-        <p class="title">Available Services</p>
-    {% endif %}
-    {% if user.is_customer %}
-        {% for service in sh %}
-            <div>
-                <a href="/services/{{service.service.id}}">{{service.service.name}}</a> ({{service.service.field}})
-                <p style="margin: 0; display: inline-block;"> ❱❱ {{service.price}}</p>
-                <p style="margin: 0; display: inline-block;"> ❱❱ {{ service.request_date }}</p>
-                <p style="float: right; margin: 0;">
-                    by <a href="/company/{{service.service.company.user}}">{{service.service.company.user}}</a>
-                </p> 
+
+        <div class="profile-info">
+            <h3>Company Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Company Name:</label>
+                    <span>{{ user.username }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Email:</label>
+                    <span>{{ user.email }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Field of Work:</label>
+                    <span>{{ company.field_of_work }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Rating:</label>
+                    <span>
+                        {% if company.rating > 0 %}
+                            {{ company.rating }}/5 stars
+                        {% else %}
+                            Not rated yet
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <label>Member Since:</label>
+                    <span>{{ user.date_joined|date:"M d, Y" }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Total Services:</label>
+                    <span>{{ services.count }} service{{ services.count|pluralize }}</span>
+                </div>
             </div>
-            <div class="line"></div>
-        {% endfor %}
-    {% else %}
-        {% for service in services %}
-        <div class="list_services_profile">
-            <a href="/services/{{service.id}}">{{service.name}}</a>-- {{service.price_hour}}€/hour
-            <div class="line"></div>
         </div>
-        {% endfor %}
-    {% endif %}
+
+        <div class="company-services">
+            <h3>Our Services</h3>
+            {% if services %}
+                <div class="services-list">
+                    {% for service in services %}
+                        <div class="service-card">
+                            <h4><a href="/services/{{ service.id }}">{{ service.name }}</a></h4>
+                            <div class="service-details">
+                                <p><strong>Category:</strong> {{ service.field }}</p>
+                                <p><strong>Price per Hour:</strong> ${{ service.price_hour }}</p>
+                                <p><strong>Description:</strong> {{ service.description|truncatewords:20 }}</p>
+                                <p><strong>Created:</strong> {{ service.date_created|date:"M d, Y" }}</p>
+                            </div>
+                            <div class="service-actions">
+                                <a href="/services/{{ service.id }}" class="btn btn-secondary">View Details</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-services">No services created yet.</p>
+                {% if user == request.user %}
+                    <a href="/services/create/" class="btn btn-primary">Create Your First Service</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="profile-actions">
+            {% if user == request.user %}
+                <a href="/services/create/" class="btn btn-primary">Create New Service</a>
+            {% endif %}
+            <a href="/services/" class="btn btn-secondary">Browse All Services</a>
+            {% if user == request.user %}
+                <a href="/logout/" class="btn btn-secondary">Logout</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

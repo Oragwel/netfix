@@ -31,6 +31,20 @@
                     <label>Member Since:</label>
                     <span>{{ user.date_joined|date:"M d, Y" }}</span>
                 </div>
+                <div class="info-item">
+                    <label>Total Requests:</label>
+                    <span>{{ service_requests.count }} request{{ service_requests.count|pluralize }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Account Status:</label>
+                    <span>
+                        {% if user.is_active %}
+                            <span style="color: #4CAF50;">Active</span>
+                        {% else %}
+                            <span style="color: #f44336;">Inactive</span>
+                        {% endif %}
+                    </span>
+                </div>
             </div>
         </div>
         
@@ -60,7 +74,9 @@
         
         <div class="profile-actions">
             <a href="/services/" class="btn btn-primary">Browse Services</a>
-            <a href="/main/logout/" class="btn btn-secondary">Logout</a>
+            {% if user == request.user %}
+                <a href="/logout/" class="btn btn-secondary">Logout</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
