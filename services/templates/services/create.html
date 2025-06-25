@@ -6,8 +6,18 @@
 {% block content %}
     <div class="create-service-container">
         <h1>Create New Service</h1>
-        
+
         {% if user.is_company %}
+            <div class="company-info-banner">
+                <h3>Company: {{ company.user.username }}</h3>
+                <p><strong>Specialization:</strong> {{ company.field_of_work }}</p>
+                {% if company.field_of_work == "All in One" %}
+                    <p class="info-text">As an "All in One" company, you can create services in any category.</p>
+                {% else %}
+                    <p class="info-text">You can only create services in the {{ company.field_of_work }} category.</p>
+                {% endif %}
+            </div>
+
             <form method="post">
                 {% csrf_token %}
                 
@@ -38,6 +48,9 @@
                 <div class="form-group">
                     <label for="{{ form.field.id_for_label }}">Service Category:</label>
                     {{ form.field }}
+                    {% if form.field.help_text %}
+                        <small class="help-text">{{ form.field.help_text }}</small>
+                    {% endif %}
                     {% if form.field.errors %}
                         <div class="error">{{ form.field.errors }}</div>
                     {% endif %}

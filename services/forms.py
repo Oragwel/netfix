@@ -34,8 +34,56 @@ class CreateNewService(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        # Extract company from kwargs if provided
+        self.company = kwargs.pop('company', None)
         super().__init__(*args, **kwargs)
         self.fields['price_hour'].validators = [MinValueValidator(0.01)]
+
+        # Restrict field choices based on company's field of work
+        if self.company:
+            if self.company.field_of_work == "All in One":
+                # "All in One" companies can create services in any field except "All in One" itself
+                available_choices = [choice for choice in Service.FIELD_CHOICES if choice[0] != "All in One"]
+            else:
+                # Other companies can only create services in their specific field
+                available_choices = [(self.company.field_of_work, self.company.field_of_work)]
+
+            self.fields['field'].choices = available_choices
+
+            # Add help text to explain the restriction
+            if self.company.field_of_work != "All in One":
+                self.fields['field'].help_text = f"Your company specializes in {self.company.field_of_work} services."
+            else:
+                self.fields['field'].help_text = "As an 'All in One' company, you can create services in any category."
+
+    def clean(self):
+        """Additional validation for service field restrictions"""
+        cleaned_data = super().clean()
+        field = cleaned_data.get('field')
+
+        if self.company and field:
+            # "All in One" companies can create services in any field except "All in One"
+            if self.company.field_of_work == "All in One":
+                if field == "All in One":
+                    raise forms.ValidationError("Services cannot be categorized as 'All in One'. Please choose a specific service category.")
+            else:
+                # Other companies can only create services in their specific field
+                if self.company.field_of_work != field:
+                    raise forms.ValidationError(
+                        f"Your company specializes in '{self.company.field_of_work}' services. "
+                        f"You cannot create services in the '{field}' category."
+                    )
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        """Override save to set company before saving"""
+        instance = super().save(commit=False)
+        if self.company:
+            instance.company = self.company
+        if commit:
+            instance.save()
+        return instance
 
 
 class RequestServiceForm(forms.ModelForm):

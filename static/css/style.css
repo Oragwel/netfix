@@ -833,4 +833,36 @@ span {
   text-align: center;
 }
 
+/* ======================================== Company Info Banner ======================================== */
+
+.company-info-banner {
+  background: rgba(236, 47, 0, 0.1);
+  border: 1px solid rgba(236, 47, 0, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.company-info-banner h3 {
+  color: #ec2f00;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.company-info-banner p {
+  color: #fff;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.company-info-banner .info-text {
+  color: #f0f0f0;
+  font-style: italic;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 5px;
+}
+
 /* ============================================================================================== */

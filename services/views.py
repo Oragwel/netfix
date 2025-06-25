@@ -8,17 +8,29 @@ def index(request, id):
     return render(request, "services/single_service.html", {"service": service})
 
 def create(request):
+    # Check if user is authenticated and is a company
+    if not request.user.is_authenticated:
+        return redirect('/register/login/')
+
+    if not request.user.is_company:
+        return render(request, 'users/error.html', {'message': 'Only companies can create services.'})
+
+    try:
+        company = Company.objects.get(user=request.user)
+    except Company.DoesNotExist:
+        return render(request, 'users/error.html', {'message': 'Company profile not found.'})
+
     if request.method == "POST":
-        form = CreateNewService(request.POST)
+        form = CreateNewService(request.POST, company=company)
         if form.is_valid():
             service = form.save(commit=False)
-            service.company = Company.objects.get(user=request.user)  # ✅ Ensured only companies can create services
+            service.company = company
             service.save()
-            return redirect("services_list")  # ✅ Redirects after successful form submission
+            return redirect("services_list")
     else:
-        form = CreateNewService()
+        form = CreateNewService(company=company)
 
-    return render(request, "services/create.html", {"form": form})
+    return render(request, "services/create.html", {"form": form, "company": company})
 
 # Added missing function to get the service list
 def service_list(request):
