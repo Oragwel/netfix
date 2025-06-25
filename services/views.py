@@ -60,6 +60,14 @@ def service_field(request, field):
 
 def request_service(request, id):
     service = get_object_or_404(Service, id=id)  # ✅ Used get_object_or_404() for better error handling
+
+    # Check if user is authenticated and is a customer
+    if not request.user.is_authenticated:
+        return redirect('/register/login/')
+
+    if not request.user.is_customer:
+        return render(request, 'users/error.html', {'message': 'Only customers can request services.'})
+
     if request.method == "POST":
         form = RequestServiceForm(request.POST)
         if form.is_valid():
@@ -67,7 +75,8 @@ def request_service(request, id):
             request_instance.customer = request.user.customer  # ✅ Ensured only customers can request services
             request_instance.service = service
             request_instance.save()
-            return redirect("customer_profile")  # ✅ Redirects after successful request submission
+            # Redirect to customer profile with the username parameter
+            return redirect(f'/customer/{request.user.username}')
     else:
         form = RequestServiceForm()
 
