@@ -6,7 +6,24 @@ from .forms import CreateNewService, RequestServiceForm
 
 def index(request, id):
     service = get_object_or_404(Service, id=id)  # ✅ Used get_object_or_404() instead of Service.objects.get() to prevent crashes
-    return render(request, "services/single_service.html", {"service": service})
+
+    # Get other services from the same company (excluding current service)
+    other_services = Service.objects.filter(
+        company=service.company
+    ).exclude(id=service.id).order_by('-date_created')[:3]
+
+    # Get related services in the same category (excluding current service)
+    related_services = Service.objects.filter(
+        field=service.field
+    ).exclude(id=service.id).order_by('-date_created')[:3]
+
+    context = {
+        'service': service,
+        'other_services': other_services,
+        'related_services': related_services,
+    }
+
+    return render(request, "services/single_service.html", context)
 
 def create(request):
     # Check if user is authenticated and is a company
