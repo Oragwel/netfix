@@ -865,4 +865,227 @@ span {
   border-radius: 5px;
 }
 
+/* ======================================== Services Pages ======================================== */
+
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 30px 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+}
+
+.services-header h1 {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.services-subtitle {
+  color: #f0f0f0;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.services-navigation {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 25px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: rgba(236, 47, 0, 0.2);
+  border-color: #ec2f00;
+  transform: translateY(-2px);
+}
+
+.nav-link.active {
+  background: #ec2f00;
+  border-color: #ec2f00;
+  color: white;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.service-header h3 {
+  margin: 0;
+  flex: 1;
+}
+
+.count-badge, .new-badge, .category-badge {
+  background: #ec2f00;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.new-badge {
+  background: #4CAF50;
+}
+
+.category-badge {
+  background: rgba(255,255,255,0.2);
+  color: #f0f0f0;
+}
+
+.service-info {
+  margin-bottom: 20px;
+}
+
+.category-tag {
+  background: rgba(236, 47, 0, 0.2);
+  color: #ec2f00;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.price {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.popularity-indicator {
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+}
+
+.popularity-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.popularity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ec2f00, #ff6b47);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.popularity-text {
+  color: #f0f0f0;
+  font-size: 0.8rem;
+}
+
+.category-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.stats-card {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.stats-card h4 {
+  color: #ec2f00;
+  font-size: 2rem;
+  margin: 0 0 5px 0;
+}
+
+.stats-card p {
+  color: #f0f0f0;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.services-footer {
+  margin-top: 50px;
+  padding: 30px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+}
+
+.services-footer h4 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.category-link {
+  display: block;
+  padding: 12px 15px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.category-link:hover {
+  background: rgba(236, 47, 0, 0.2);
+  border-color: #ec2f00;
+  transform: translateY(-2px);
+}
+
+.restriction-note {
+  color: #ff9800;
+  font-style: italic;
+  text-align: center;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
 /* ============================================================================================== */

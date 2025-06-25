@@ -1,26 +1,96 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    {{field}} Services List
+    {{ field }} Services - NetFix
 {% endblock %}
-{% block content %}
 
-    {% if services.all|length != 0 %}
-        <p class="title">{{field}} Services</p>
-        <ul class='services_list'>
-            {% for service in services.all %}
-                <div style="display: ruby;">
-                    <div class='service_list_info'>
-                        <li><a href="/services/{{service.id}}">{{ service.name }}</a>-- {{ service.price_hour }}€/hour</li>
-                        <pre>{{ service.description }}</pre>
-                    </div>
-                    <p style="display:block; margin: 0; float: right;font-size: small; margin-right: 30px;">by <a href="/company/{{service.company.user}}">{{service.company.user}}</a></p>
-                </div>
-                {% if forloop.counter != services.all|length %}
-                    <div class="line"></div>
+{% block content %}
+    <div class="services-container">
+        <div class="services-header">
+            <h1>{{ field }} Services</h1>
+            <p class="services-subtitle">Professional {{ field|lower }} services from verified companies</p>
+        </div>
+
+        <div class="services-navigation">
+            <div class="nav-links">
+                <a href="/services/" class="nav-link">All Services</a>
+                <a href="/services/most-requested/" class="nav-link">Most Requested</a>
+                <a href="/services/{{ field|slugify }}/" class="nav-link active">{{ field }}</a>
+                {% if user.is_company %}
+                    <a href="/services/create/" class="nav-link">Create Service</a>
                 {% endif %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        <h2>Sorry. No {{field}} services available</h2>
-    {% endif %}
+            </div>
+        </div>
+
+        {% if services %}
+            <div class="category-stats">
+                <div class="stats-card">
+                    <h4>{{ services.count }}</h4>
+                    <p>{{ field }} Service{{ services.count|pluralize }}</p>
+                </div>
+                <div class="stats-card">
+                    <h4>{{ services|length }}</h4>
+                    <p>Available Provider{{ services|length|pluralize }}</p>
+                </div>
+            </div>
+
+            <div class="services-grid">
+                {% for service in services %}
+                    <div class="service-card">
+                        <div class="service-header">
+                            <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                            <span class="category-badge">{{ service.field }}</span>
+                        </div>
+
+                        <div class="service-info">
+                            <p><strong>Company:</strong> <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></p>
+                            <p><strong>Specialization:</strong> {{ service.company.field_of_work }}</p>
+                            <p><strong>Price per Hour:</strong> <span class="price">${{ service.price_hour }}</span></p>
+                            <p><strong>Description:</strong> {{ service.description|truncatewords:15 }}</p>
+                            <p><strong>Created:</strong> {{ service.date_created|date:"M d, Y" }}</p>
+                        </div>
+
+                        <div class="service-actions">
+                            <a href="/services/{{ service.id }}" class="btn btn-primary">View Details</a>
+                            {% if user.is_authenticated and user.is_customer %}
+                                <a href="/services/{{ service.id }}/request_service/" class="btn btn-secondary">Request Service</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-services">
+                <h3>No {{ field }} Services Available</h3>
+                <p>There are currently no {{ field|lower }} services available in this category.</p>
+                {% if user.is_authenticated and user.is_company %}
+                    {% if user.company.field_of_work == field or user.company.field_of_work == "All in One" %}
+                        <a href="/services/create/" class="btn btn-primary">Create {{ field }} Service</a>
+                    {% else %}
+                        <p class="restriction-note">Your company specializes in {{ user.company.field_of_work }}. You cannot create {{ field }} services.</p>
+                    {% endif %}
+                {% else %}
+                    <a href="/register/" class="btn btn-primary">Register as Company</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="services-footer">
+            <div class="category-links">
+                <h4>Other Categories</h4>
+                <div class="category-grid">
+                    {% if field != "Air Conditioner" %}<a href="/services/air-conditioner/" class="category-link">Air Conditioner</a>{% endif %}
+                    {% if field != "Carpentry" %}<a href="/services/carpentry/" class="category-link">Carpentry</a>{% endif %}
+                    {% if field != "Electricity" %}<a href="/services/electricity/" class="category-link">Electricity</a>{% endif %}
+                    {% if field != "Gardening" %}<a href="/services/gardening/" class="category-link">Gardening</a>{% endif %}
+                    {% if field != "Home Machines" %}<a href="/services/home-machines/" class="category-link">Home Machines</a>{% endif %}
+                    {% if field != "Housekeeping" %}<a href="/services/housekeeping/" class="category-link">Housekeeping</a>{% endif %}
+                    {% if field != "Interior Design" %}<a href="/services/interior-design/" class="category-link">Interior Design</a>{% endif %}
+                    {% if field != "Locks" %}<a href="/services/locks/" class="category-link">Locks</a>{% endif %}
+                    {% if field != "Painting" %}<a href="/services/painting/" class="category-link">Painting</a>{% endif %}
+                    {% if field != "Plumbing" %}<a href="/services/plumbing/" class="category-link">Plumbing</a>{% endif %}
+                    {% if field != "Water Heaters" %}<a href="/services/water-heaters/" class="category-link">Water Heaters</a>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

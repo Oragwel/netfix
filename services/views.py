@@ -1,5 +1,6 @@
 from users.models import Company
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Count
 from .models import Service, ServiceRequest
 from .forms import CreateNewService, RequestServiceForm
 
@@ -36,6 +37,18 @@ def create(request):
 def service_list(request):
     services = Service.objects.all().order_by("-date_created")
     return render(request, "services/list.html", {"services": services})
+
+
+def most_requested_services(request):
+    """Display services ordered by number of requests (most requested first)"""
+    services = Service.objects.annotate(
+        request_count=Count('servicerequest')
+    ).order_by('-request_count', '-date_created')
+
+    return render(request, "services/most_requested.html", {
+        "services": services,
+        "page_title": "Most Requested Services"
+    })
 
 
 # Added missing function to get the service field
