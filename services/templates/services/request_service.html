@@ -1,0 +1,68 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Request Service - {{ service.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="request-service-container">
+        <h1>Request Service</h1>
+
+        <div class="service-summary">
+            <h3>Service Details</h3>
+            <div class="service-info">
+                <p><strong>Service:</strong> {{ service.name }}</p>
+                <p><strong>Company:</strong> {{ service.company.user.username }}</p>
+                <p><strong>Category:</strong> {{ service.field }}</p>
+                <p><strong>Price per Hour:</strong> ${{ service.price_hour }}</p>
+            </div>
+        </div>
+
+        <div class="request-form">
+            <h3>Request Details</h3>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.address.id_for_label }}">Service Address:</label>
+                    {{ form.address }}
+                    {% if form.address.errors %}
+                        <div class="error">{{ form.address.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.hours_needed.id_for_label }}">Hours Needed:</label>
+                    {{ form.hours_needed }}
+                    {% if form.hours_needed.errors %}
+                        <div class="error">{{ form.hours_needed.errors }}</div>
+                    {% endif %}
+                    <small class="help-text">Estimated total cost: $<span id="total-cost">{{ service.price_hour }}</span></small>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="error">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                    <a href="/services/{{ service.id }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Calculate total cost dynamically
+        const hoursInput = document.getElementById('{{ form.hours_needed.id_for_label }}');
+        const totalCostSpan = document.getElementById('total-cost');
+        const pricePerHour = {{ service.price_hour }};
+
+        if (hoursInput) {
+            hoursInput.addEventListener('input', function() {
+                const hours = parseInt(this.value) || 1;
+                const totalCost = (hours * pricePerHour).toFixed(2);
+                totalCostSpan.textContent = totalCost;
+            });
+        }
+    </script>
+{% endblock %}

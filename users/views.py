@@ -48,5 +48,26 @@ class CompanySignUpView(CreateView):
 
 
 def LoginUserView(request):
-    """ Placeholder function - Needs implementation for handling user authentication """
-    pass
+    """ Handles user authentication using email and password """
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            # Get user by email since we're using email for login
+            try:
+                user = User.objects.get(email=email)
+                # Authenticate using username (Django's default) but with email lookup
+                user = authenticate(request, username=user.username, password=password)
+                if user is not None:
+                    login(request, user)
+                    return redirect('/')
+                else:
+                    form.add_error('password', 'Invalid password.')
+            except User.DoesNotExist:
+                form.add_error('email', 'No account found with this email.')
+    else:
+        form = UserLoginForm()
+
+    return render(request, 'users/login.html', {'form': form})

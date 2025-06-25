@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Error
+{% endblock %}
+
+{% block content %}
+    <div class="error-container">
+        <h1>Oops! Something went wrong</h1>
+        
+        {% if message %}
+            <div class="error-message">
+                <p>{{ message }}</p>
+            </div>
+        {% else %}
+            <div class="error-message">
+                <p>An unexpected error occurred. Please try again.</p>
+            </div>
+        {% endif %}
+        
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">Go Home</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+        </div>
+    </div>
+{% endblock %}

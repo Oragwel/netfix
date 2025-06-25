@@ -1,0 +1,73 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    {{ service.name }} - Service Details
+{% endblock %}
+
+{% block content %}
+    <div class="service-detail-container">
+        <div class="service-header">
+            <h1>{{ service.name }}</h1>
+            <p class="service-category">{{ service.field }}</p>
+        </div>
+
+        <div class="service-info">
+            <div class="service-details">
+                <h3>Service Information</h3>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <label>Company:</label>
+                        <span><a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Category:</label>
+                        <span>{{ service.field }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Price per Hour:</label>
+                        <span>${{ service.price_hour }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Created:</label>
+                        <span>{{ service.date_created|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+
+                <div class="service-description">
+                    <h4>Description</h4>
+                    <p>{{ service.description }}</p>
+                </div>
+            </div>
+
+            <div class="company-info">
+                <h3>About the Company</h3>
+                <p><strong>Company:</strong> {{ service.company.user.username }}</p>
+                <p><strong>Specialization:</strong> {{ service.company.field_of_work }}</p>
+                <p><strong>Rating:</strong>
+                    {% if service.company.rating > 0 %}
+                        {{ service.company.rating }}/5 stars
+                    {% else %}
+                        Not rated yet
+                    {% endif %}
+                </p>
+                <a href="/company/{{ service.company.user.username }}" class="btn btn-secondary">View Company Profile</a>
+            </div>
+        </div>
+
+        <div class="service-actions">
+            {% if user.is_authenticated %}
+                {% if user.is_customer %}
+                    <a href="/services/{{ service.id }}/request_service/" class="btn btn-primary">Request This Service</a>
+                {% elif user.is_company and user == service.company.user %}
+                    <p class="owner-note">This is your service.</p>
+                {% else %}
+                    <p class="company-note">Only customers can request services.</p>
+                {% endif %}
+            {% else %}
+                <p class="login-note">Please <a href="/register/login/">login</a> to request this service.</p>
+            {% endif %}
+
+            <a href="/services/" class="btn btn-secondary">Back to Services</a>
+            <a href="/services/{{ service.field|slugify }}/" class="btn btn-secondary">More {{ service.field }} Services</a>
+        </div>
+    </div>
+{% endblock %}

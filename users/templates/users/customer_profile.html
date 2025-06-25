@@ -1,0 +1,66 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    {{ user.username }} - Customer Profile
+{% endblock %}
+
+{% block content %}
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>{{ user.username }}'s Profile</h1>
+            <p class="profile-type">Customer</p>
+        </div>
+        
+        <div class="profile-info">
+            <h3>Account Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Username:</label>
+                    <span>{{ user.username }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Email:</label>
+                    <span>{{ user.email }}</span>
+                </div>
+                {% if customer.date_of_birth %}
+                <div class="info-item">
+                    <label>Date of Birth:</label>
+                    <span>{{ customer.date_of_birth|date:"M d, Y" }}</span>
+                </div>
+                {% endif %}
+                <div class="info-item">
+                    <label>Member Since:</label>
+                    <span>{{ user.date_joined|date:"M d, Y" }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="service-requests">
+            <h3>My Service Requests</h3>
+            {% if service_requests %}
+                <div class="requests-list">
+                    {% for request in service_requests %}
+                        <div class="request-card">
+                            <h4>{{ request.service.name }}</h4>
+                            <div class="request-details">
+                                <p><strong>Company:</strong> {{ request.service.company.user.username }}</p>
+                                <p><strong>Service Type:</strong> {{ request.service.field }}</p>
+                                <p><strong>Address:</strong> {{ request.address }}</p>
+                                <p><strong>Hours Needed:</strong> {{ request.hours_needed }}</p>
+                                <p><strong>Total Cost:</strong> ${{ request.calculated_cost }}</p>
+                                <p><strong>Requested On:</strong> {{ request.request_date|date:"M d, Y H:i" }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-requests">You haven't made any service requests yet.</p>
+                <a href="/services/" class="btn btn-primary">Browse Services</a>
+            {% endif %}
+        </div>
+        
+        <div class="profile-actions">
+            <a href="/services/" class="btn btn-primary">Browse Services</a>
+            <a href="/main/logout/" class="btn btn-secondary">Logout</a>
+        </div>
+    </div>
+{% endblock %}

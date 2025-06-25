@@ -15,7 +15,8 @@ def validate_email(value):
     if User.objects.filter(email=value).exists():
         raise ValidationError(f"{value} is already taken.")
 
-
+# Removed CustomerRegistrationForm as it's not used and has incorrect fields
+        
 class CustomerSignUpForm(UserCreationForm):
     date_of_birth = forms.DateField(widget=DateInput)  # ✅ Added proper field for capturing customer birthdate
     email = forms.EmailField(validators=[validate_email])  # ✅ Integrated email validation function
@@ -29,7 +30,7 @@ class CustomerSignUpForm(UserCreationForm):
         user.is_customer = True  # ✅ Ensured correct role assignment for customers
         if commit:
             user.save()
-            Customer.objects.create(user=user)  # ✅ Auto-create related Customer instance
+            Customer.objects.create(user=user, date_of_birth=self.cleaned_data.get('date_of_birth'))  # ✅ Auto-create related Customer instance with date_of_birth
         return user
 
 
