@@ -16,7 +16,7 @@ def customer_profile(request, name):
         service_requests = ServiceRequest.objects.filter(customer=customer).order_by('-request_date')
 
         # Calculate additional statistics
-        total_spent = sum(request.calculated_cost for request in service_requests)
+        total_spent = sum(request.calculated_cost() for request in service_requests)
         unique_companies = service_requests.values('service__company').distinct().count()
         unique_categories = service_requests.values('service__field').distinct().count()
 
