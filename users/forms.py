@@ -13,17 +13,36 @@ class DateInput(forms.DateInput):
 def validate_email(value):
     """Ensures email uniqueness across User model"""
     if User.objects.filter(email=value).exists():
-        raise ValidationError(f"{value} is already taken.")
+        raise ValidationError(f"The email '{value}' is already registered. Please use a different email.")
+
+def validate_username(value):
+    """Ensures username uniqueness across User model"""
+    if User.objects.filter(username=value).exists():
+        raise ValidationError(f"The username '{value}' is already taken. Please choose a different username.")
 
 # Removed CustomerRegistrationForm as it's not used and has incorrect fields
         
 class CustomerSignUpForm(UserCreationForm):
     date_of_birth = forms.DateField(widget=DateInput)  # ✅ Added proper field for capturing customer birthdate
-    email = forms.EmailField(validators=[validate_email])  # ✅ Integrated email validation function
+    email = forms.EmailField()  # ✅ Email field for customer registration
 
     class Meta:
         model = User
         fields = ["username", "email", "date_of_birth", "password1", "password2"]
+
+    def clean_username(self):
+        """Validate username uniqueness"""
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError(f"The username '{username}' is already taken. Please choose a different username.")
+        return username
+
+    def clean_email(self):
+        """Validate email uniqueness"""
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError(f"The email '{email}' is already registered. Please use a different email.")
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -36,11 +55,25 @@ class CustomerSignUpForm(UserCreationForm):
 
 class CompanySignUpForm(UserCreationForm):
     field_of_work = forms.ChoiceField(choices=Company.FIELD_CHOICES)  # ✅ Dynamically loads choices for company specialization
-    email = forms.EmailField(validators=[validate_email])  # ✅ Ensured unique email validation
+    email = forms.EmailField()  # ✅ Email field for company registration
 
     class Meta:
         model = User
         fields = ["username", "email", "field_of_work", "password1", "password2"]
+
+    def clean_username(self):
+        """Validate username uniqueness"""
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError(f"The username '{username}' is already taken. Please choose a different username.")
+        return username
+
+    def clean_email(self):
+        """Validate email uniqueness"""
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError(f"The email '{email}' is already registered. Please use a different email.")
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)
