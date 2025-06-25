@@ -1,68 +1,181 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    Request Service - {{ service.name }}
+    Request {{ service.name }} - {{ service.company.user.username }} | NetFix
 {% endblock %}
 
 {% block content %}
     <div class="request-service-container">
-        <h1>Request Service</h1>
+        <!-- Page Header -->
+        <div class="request-header">
+            <h1>Request Service</h1>
+            <p class="request-subtitle">Fill out the details below to request this service</p>
+        </div>
 
-        <div class="service-summary">
-            <h3>Service Details</h3>
-            <div class="service-info">
-                <p><strong>Service:</strong> {{ service.name }}</p>
-                <p><strong>Company:</strong> {{ service.company.user.username }}</p>
-                <p><strong>Category:</strong> {{ service.field }}</p>
-                <p><strong>Price per Hour:</strong> ${{ service.price_hour }}</p>
+        <!-- Service Summary Card -->
+        <div class="service-summary-card">
+            <div class="service-summary-header">
+                <h2>Service Details</h2>
+                <span class="service-category">{{ service.field }}</span>
+            </div>
+
+            <div class="service-summary-content">
+                <div class="service-main-info">
+                    <h3>{{ service.name }}</h3>
+                    <p class="service-description">{{ service.description|truncatewords:25 }}</p>
+                </div>
+
+                <div class="service-provider-info">
+                    <div class="provider-avatar">
+                        <span class="provider-initial">{{ service.company.user.username|first|upper }}</span>
+                    </div>
+                    <div class="provider-details">
+                        <h4><a href="/company/{{ service.company.user.username }}" class="company-link">{{ service.company.user.username }}</a></h4>
+                        <p class="provider-type">{{ service.company.field_of_work }} Specialist</p>
+                        <div class="provider-rating">
+                            {% if service.company.rating > 0 %}
+                                <span class="rating-stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= service.company.rating %}⭐{% else %}☆{% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="rating-text">{{ service.company.rating }}/5</span>
+                            {% else %}
+                                <span class="no-rating">Not rated yet</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-pricing">
+                    <div class="price-display">
+                        <span class="price-amount">${{ service.price_hour }}</span>
+                        <span class="price-unit">per hour</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="request-form">
-            <h3>Request Details</h3>
-            <form method="post">
+        <!-- Request Form -->
+        <div class="request-form-card">
+            <div class="form-header">
+                <h2>Request Details</h2>
+                <p>Please provide the following information for your service request</p>
+            </div>
+
+            <form method="post" class="request-form">
                 {% csrf_token %}
 
-                <div class="form-group">
-                    <label for="{{ form.address.id_for_label }}">Service Address:</label>
-                    {{ form.address }}
-                    {% if form.address.errors %}
-                        <div class="error">{{ form.address.errors }}</div>
-                    {% endif %}
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="{{ form.address.id_for_label }}" class="form-label">
+                            <span class="label-icon">📍</span>
+                            Service Address
+                        </label>
+                        {{ form.address }}
+                        {% if form.address.errors %}
+                            <div class="form-error">{{ form.address.errors }}</div>
+                        {% endif %}
+                        <small class="form-help">Where should the service be performed?</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.hours_needed.id_for_label }}" class="form-label">
+                            <span class="label-icon">⏰</span>
+                            Hours Needed
+                        </label>
+                        {{ form.hours_needed }}
+                        {% if form.hours_needed.errors %}
+                            <div class="form-error">{{ form.hours_needed.errors }}</div>
+                        {% endif %}
+                        <small class="form-help">Estimated time required for the service</small>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="{{ form.hours_needed.id_for_label }}">Hours Needed:</label>
-                    {{ form.hours_needed }}
-                    {% if form.hours_needed.errors %}
-                        <div class="error">{{ form.hours_needed.errors }}</div>
-                    {% endif %}
-                    <small class="help-text">Estimated total cost: $<span id="total-cost">{{ service.price_hour }}</span></small>
+                <!-- Cost Calculator -->
+                <div class="cost-calculator">
+                    <h3>Cost Calculation</h3>
+                    <div class="cost-breakdown">
+                        <div class="cost-item">
+                            <span class="cost-label">Service Rate:</span>
+                            <span class="cost-value">${{ service.price_hour }}/hour</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Hours Needed:</span>
+                            <span class="cost-value" id="hours-display">1 hour</span>
+                        </div>
+                        <div class="cost-item cost-total">
+                            <span class="cost-label">Total Estimated Cost:</span>
+                            <span class="cost-value" id="total-cost">${{ service.price_hour }}</span>
+                        </div>
+                    </div>
                 </div>
 
                 {% if form.non_field_errors %}
-                    <div class="error">{{ form.non_field_errors }}</div>
+                    <div class="form-error">{{ form.non_field_errors }}</div>
                 {% endif %}
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Submit Request</button>
-                    <a href="/services/{{ service.id }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-large">
+                        📞 Submit Service Request
+                    </button>
+                    <a href="/services/{{ service.id }}" class="btn btn-outline">
+                        ← Back to Service
+                    </a>
                 </div>
             </form>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="request-info">
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-icon">ℹ️</div>
+                    <div class="info-content">
+                        <h4>What happens next?</h4>
+                        <p>After submitting your request, it will be added to your service history and the company will be notified.</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">💰</div>
+                    <div class="info-content">
+                        <h4>Cost Calculation</h4>
+                        <p>The total cost is calculated automatically based on the hourly rate and estimated hours needed.</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📋</div>
+                    <div class="info-content">
+                        <h4>Service History</h4>
+                        <p>You can view all your requested services in your <a href="/customer/{{ user.username }}">customer profile</a>.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Calculate total cost dynamically
+        // Enhanced cost calculator
         const hoursInput = document.getElementById('{{ form.hours_needed.id_for_label }}');
         const totalCostSpan = document.getElementById('total-cost');
+        const hoursDisplay = document.getElementById('hours-display');
         const pricePerHour = {{ service.price_hour }};
 
+        function updateCost() {
+            const hours = parseInt(hoursInput.value) || 1;
+            const totalCost = (hours * pricePerHour).toFixed(2);
+
+            totalCostSpan.textContent = '$' + totalCost;
+            hoursDisplay.textContent = hours + ' hour' + (hours !== 1 ? 's' : '');
+        }
+
         if (hoursInput) {
-            hoursInput.addEventListener('input', function() {
-                const hours = parseInt(this.value) || 1;
-                const totalCost = (hours * pricePerHour).toFixed(2);
-                totalCostSpan.textContent = totalCost;
-            });
+            hoursInput.addEventListener('input', updateCost);
+            hoursInput.addEventListener('change', updateCost);
+
+            // Initialize display
+            updateCost();
         }
     </script>
 {% endblock %}

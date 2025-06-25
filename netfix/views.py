@@ -14,10 +14,19 @@ def customer_profile(request, name):
     if hasattr(user, 'customer'):
         customer = user.customer
         service_requests = ServiceRequest.objects.filter(customer=customer).order_by('-request_date')
+
+        # Calculate additional statistics
+        total_spent = sum(request.calculated_cost for request in service_requests)
+        unique_companies = service_requests.values('service__company').distinct().count()
+        unique_categories = service_requests.values('service__field').distinct().count()
+
         return render(request, 'users/customer_profile.html', {
             'user': user,
             'customer': customer,
-            'service_requests': service_requests
+            'service_requests': service_requests,
+            'total_spent': total_spent,
+            'unique_companies': unique_companies,
+            'unique_categories': unique_categories,
         })
     else:
         return render(request, 'users/error.html', {'message': 'User is not a customer'})

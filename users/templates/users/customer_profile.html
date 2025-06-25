@@ -1,82 +1,230 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    {{ user.username }} - Customer Profile
+    {{ user.username }} - Customer Profile | NetFix
 {% endblock %}
 
 {% block content %}
-    <div class="profile-container">
-        <div class="profile-header">
-            <h1>{{ user.username }}'s Profile</h1>
-            <p class="profile-type">Customer</p>
-        </div>
-        
-        <div class="profile-info">
-            <h3>Account Information</h3>
-            <div class="info-grid">
-                <div class="info-item">
-                    <label>Username:</label>
-                    <span>{{ user.username }}</span>
-                </div>
-                <div class="info-item">
-                    <label>Email:</label>
-                    <span>{{ user.email }}</span>
-                </div>
-                {% if customer.date_of_birth %}
-                <div class="info-item">
-                    <label>Date of Birth:</label>
-                    <span>{{ customer.date_of_birth|date:"M d, Y" }}</span>
-                </div>
-                {% endif %}
-                <div class="info-item">
-                    <label>Member Since:</label>
-                    <span>{{ user.date_joined|date:"M d, Y" }}</span>
-                </div>
-                <div class="info-item">
-                    <label>Total Requests:</label>
-                    <span>{{ service_requests.count }} request{{ service_requests.count|pluralize }}</span>
-                </div>
-                <div class="info-item">
-                    <label>Account Status:</label>
-                    <span>
-                        {% if user.is_active %}
-                            <span style="color: #4CAF50;">Active</span>
-                        {% else %}
-                            <span style="color: #f44336;">Inactive</span>
-                        {% endif %}
-                    </span>
+    <div class="customer-profile-container">
+        <!-- Profile Header -->
+        <div class="customer-profile-header">
+            <div class="customer-avatar">
+                <span class="customer-initial">{{ user.username|first|upper }}</span>
+            </div>
+            <div class="customer-info">
+                <h1>{{ user.username }}</h1>
+                <p class="customer-type">🛍️ Customer Account</p>
+                <div class="customer-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ service_requests.count }}</span>
+                        <span class="stat-label">Service{{ service_requests.count|pluralize }} Requested</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ user.date_joined|timesince|truncatewords:1 }}</span>
+                        <span class="stat-label">Member</span>
+                    </div>
+                    {% if service_requests %}
+                    <div class="stat-item">
+                        <span class="stat-number">${{ total_spent|floatformat:2|default:"0.00" }}</span>
+                        <span class="stat-label">Total Spent</span>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        
-        <div class="service-requests">
-            <h3>My Service Requests</h3>
+
+        <!-- Account Information -->
+        <div class="customer-account-info">
+            <h2>Account Information</h2>
+            <div class="account-info-grid">
+                <div class="info-card">
+                    <div class="info-icon">👤</div>
+                    <div class="info-content">
+                        <h4>Username</h4>
+                        <p>{{ user.username }}</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📧</div>
+                    <div class="info-content">
+                        <h4>Email</h4>
+                        <p>{{ user.email }}</p>
+                    </div>
+                </div>
+
+                {% if customer.date_of_birth %}
+                <div class="info-card">
+                    <div class="info-icon">🎂</div>
+                    <div class="info-content">
+                        <h4>Date of Birth</h4>
+                        <p>{{ customer.date_of_birth|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="info-card">
+                    <div class="info-icon">📅</div>
+                    <div class="info-content">
+                        <h4>Member Since</h4>
+                        <p>{{ user.date_joined|date:"F d, Y" }}</p>
+                        <small>{{ user.date_joined|timesince }} ago</small>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">✅</div>
+                    <div class="info-content">
+                        <h4>Account Status</h4>
+                        <p>
+                            {% if user.is_active %}
+                                <span class="status-active">Active</span>
+                            {% else %}
+                                <span class="status-inactive">Inactive</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">🔢</div>
+                    <div class="info-content">
+                        <h4>Total Requests</h4>
+                        <p>{{ service_requests.count }} request{{ service_requests.count|pluralize }}</p>
+                        {% if service_requests %}
+                            <small>Latest: {{ service_requests.first.request_date|date:"M d, Y" }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Requests History -->
+        <div class="service-requests-section">
+            <div class="requests-header">
+                <h2>My Service Requests</h2>
+                <p class="requests-subtitle">Complete history of all your requested services</p>
+            </div>
+
             {% if service_requests %}
+                <div class="requests-summary">
+                    <div class="summary-stats">
+                        <div class="summary-card">
+                            <h4>{{ service_requests.count }}</h4>
+                            <p>Total Requests</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>${{ total_spent|floatformat:2|default:"0.00" }}</h4>
+                            <p>Total Spent</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>{{ unique_companies|default:0 }}</h4>
+                            <p>Companies Used</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>{{ unique_categories|default:0 }}</h4>
+                            <p>Service Types</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="requests-list">
                     {% for request in service_requests %}
                         <div class="request-card">
-                            <h4>{{ request.service.name }}</h4>
+                            <div class="request-header">
+                                <div class="request-title">
+                                    <h3><a href="/services/{{ request.service.id }}">{{ request.service.name }}</a></h3>
+                                    <span class="request-category">{{ request.service.field }}</span>
+                                </div>
+                                <div class="request-cost">
+                                    <span class="cost-amount">${{ request.calculated_cost }}</span>
+                                    <small class="cost-breakdown">${{ request.service.price_hour }}/hr × {{ request.hours_needed }}hr{{ request.hours_needed|pluralize }}</small>
+                                </div>
+                            </div>
+
                             <div class="request-details">
-                                <p><strong>Company:</strong> {{ request.service.company.user.username }}</p>
-                                <p><strong>Service Type:</strong> {{ request.service.field }}</p>
-                                <p><strong>Address:</strong> {{ request.address }}</p>
-                                <p><strong>Hours Needed:</strong> {{ request.hours_needed }}</p>
-                                <p><strong>Total Cost:</strong> ${{ request.calculated_cost }}</p>
-                                <p><strong>Requested On:</strong> {{ request.request_date|date:"M d, Y H:i" }}</p>
+                                <div class="detail-grid">
+                                    <div class="detail-item">
+                                        <div class="detail-icon">🏢</div>
+                                        <div class="detail-content">
+                                            <label>Company</label>
+                                            <p><a href="/company/{{ request.service.company.user.username }}" class="company-link">{{ request.service.company.user.username }}</a></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-item">
+                                        <div class="detail-icon">🏷️</div>
+                                        <div class="detail-content">
+                                            <label>Service Field</label>
+                                            <p><a href="/services/{{ request.service.field|slugify }}/">{{ request.service.field }}</a></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-item">
+                                        <div class="detail-icon">📍</div>
+                                        <div class="detail-content">
+                                            <label>Service Address</label>
+                                            <p>{{ request.address }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-item">
+                                        <div class="detail-icon">⏰</div>
+                                        <div class="detail-content">
+                                            <label>Hours Needed</label>
+                                            <p>{{ request.hours_needed }} hour{{ request.hours_needed|pluralize }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-item">
+                                        <div class="detail-icon">📅</div>
+                                        <div class="detail-content">
+                                            <label>Date Requested</label>
+                                            <p>{{ request.request_date|date:"F d, Y" }}</p>
+                                            <small>{{ request.request_date|date:"g:i A" }} ({{ request.request_date|timesince }} ago)</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-item">
+                                        <div class="detail-icon">💰</div>
+                                        <div class="detail-content">
+                                            <label>Calculated Cost</label>
+                                            <p class="cost-highlight">${{ request.calculated_cost }}</p>
+                                            <small>{{ request.hours_needed }}h × ${{ request.service.price_hour }}/h</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="request-actions">
+                                <a href="/services/{{ request.service.id }}" class="btn btn-outline">View Service</a>
+                                <a href="/company/{{ request.service.company.user.username }}" class="btn btn-outline">View Company</a>
+                                <a href="/services/{{ request.service.id }}/request_service/" class="btn btn-secondary">Request Again</a>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="no-requests">You haven't made any service requests yet.</p>
-                <a href="/services/" class="btn btn-primary">Browse Services</a>
+                <div class="no-requests">
+                    <div class="no-requests-icon">📋</div>
+                    <h3>No Service Requests Yet</h3>
+                    <p>You haven't made any service requests yet. Start exploring our services!</p>
+                    <div class="no-requests-actions">
+                        <a href="/services/" class="btn btn-primary">Browse All Services</a>
+                        <a href="/services/most-requested/" class="btn btn-outline">Most Requested</a>
+                    </div>
+                </div>
             {% endif %}
         </div>
-        
+
+        <!-- Profile Actions -->
         <div class="profile-actions">
-            <a href="/services/" class="btn btn-primary">Browse Services</a>
-            {% if user == request.user %}
-                <a href="/logout/" class="btn btn-secondary">Logout</a>
-            {% endif %}
+            <div class="action-buttons">
+                <a href="/services/" class="btn btn-primary">🔍 Browse Services</a>
+                <a href="/services/most-requested/" class="btn btn-outline">🔥 Most Requested</a>
+                {% if user == request.user %}
+                    <a href="/logout/" class="btn btn-secondary">🚪 Logout</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}
