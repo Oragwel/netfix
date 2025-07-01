@@ -39,18 +39,21 @@ button:hover {
 }
 
 .content {
-  background-color: #646464;
+  background-color: rgba(255, 255, 255, 0.1);
   margin: 0 auto;
   width: 65%;
   padding: 20px 60px;
-  box-shadow: 0px 0px 35px -20px #ec2f00;
+  box-shadow: 0px 0px 35px -20px #1976d2;
   border-radius: 25px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .content p {
   text-align: center;
   margin: 30px 0px;
   white-space: pre-line;
+  color: #fff;
 }
 
 .like_button {
@@ -59,17 +62,17 @@ button:hover {
   border-radius: 5px;
   padding: 10px;
   transition: background 0.7s;
-  color: #ec2f00;
+  color: #1976d2;
   text-decoration: none;
   text-transform: uppercase;
   cursor: pointer;
 }
 
 .like_button:hover {
-  background: #ec4138;
-  border: 2px solid #f05749;
-  border-right: 2px solid #e02a21;
-  border-bottom: 2px solid #e02a21;
+  background: #1976d2;
+  border: 2px solid #42a5f5;
+  border-right: 2px solid #1565c0;
+  border-bottom: 2px solid #1565c0;
   color: #f9f8fd;
 }
 
@@ -79,7 +82,8 @@ button:hover {
   font-size: 60px;
   font-weight: bold;
   text-decoration: 2px underline;
-  text-decoration-color: rgba(255, 68, 0, 0.37);
+  text-decoration-color: rgba(25, 118, 210, 0.5);
+  color: #fff;
 }
 /* ======================================== Home Page ============================================== */
 
