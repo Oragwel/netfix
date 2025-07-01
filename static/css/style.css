@@ -468,15 +468,20 @@ form input {
   font-size: 20px;
   display: block;
   border: none;
-  border-bottom: 3px solid black;
+  border-bottom: 3px solid #1976d2;
   background-color: inherit;
   margin-top: 30px;
+  color: #fff;
+}
+
+form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 form input:hover,
 input:focus {
   transition: 0.5s;
-  border-bottom: 3px solid orangered;
+  border-bottom: 3px solid #4fc3f7;
 }
 
 form select {
@@ -485,14 +490,15 @@ form select {
   padding: 6px 3px;
   background: inherit;
   border: none;
-  border-bottom: 3px solid black;
+  border-bottom: 3px solid #1976d2;
   margin-top: 30px;
+  color: #fff;
 }
 
 form select:focus,
 select:hover {
   transition: 0.5s;
-  border-bottom: 3px solid orangered;
+  border-bottom: 3px solid #4fc3f7;
 }
 
 .error_message {
