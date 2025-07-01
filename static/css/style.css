@@ -548,18 +548,18 @@ span {
 }
 
 .service-card h3, .service-card h4 {
-  color: #ec2f00;
+  color: #4fc3f7;
   margin-bottom: 15px;
   font-size: 1.5rem;
 }
 
 .service-card h3 a, .service-card h4 a {
-  color: #ec2f00;
+  color: #4fc3f7;
   text-decoration: none;
 }
 
 .service-card h3 a:hover, .service-card h4 a:hover {
-  color: #e02a21;
+  color: #29b6f6;
 }
 
 .service-card p {
@@ -569,7 +569,7 @@ span {
 }
 
 .service-card p strong {
-  color: #f0f0f0;
+  color: #e3f2fd;
 }
 
 /* Request Cards for Customer Profile */
