@@ -7,13 +7,13 @@ body {
 }
 
 a {
-  color: #ee5e4b;
+  color: #4fc3f7;
   text-decoration: none;
 }
 
 a:hover {
-  color: #e02a21;
-  text-shadow: 0px 0px 2px #a1a1a1;
+  color: #29b6f6;
+  text-shadow: 0px 0px 2px #81d4fa;
 }
 
 button:not(:last-child) {
@@ -24,17 +24,17 @@ button {
   border-radius: 5px;
   padding: 10px;
   transition: background 0.7s;
-  color: #ec2f00;
+  color: #1976d2;
   text-decoration: none;
   text-transform: uppercase;
   cursor: pointer;
   margin-top: 30px;
 }
 button:hover {
-  background: #ec4138;
-  border: 2px solid #f05749;
-  border-right: 2px solid #e02a21;
-  border-bottom: 2px solid #e02a21;
+  background: #1976d2;
+  border: 2px solid #42a5f5;
+  border-right: 2px solid #1565c0;
+  border-bottom: 2px solid #1565c0;
   color: #f9f8fd;
 }
 
