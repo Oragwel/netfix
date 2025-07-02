@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate 
-from django.views.generic import CreateView, TemplateView  
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView, TemplateView
 
 from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
 from .models import User, Company, Customer
@@ -71,3 +72,20 @@ def LoginUserView(request):
         form = UserLoginForm()
 
     return render(request, 'users/login.html', {'form': form})
+
+
+def logout_view(request):
+    """Handles user logout"""
+    logout(request)
+    return redirect('/')
+
+
+@login_required
+def profile_redirect(request):
+    """Redirects user to appropriate profile based on user type"""
+    if request.user.is_customer:
+        return redirect('customer_profile', name=request.user.username)
+    elif request.user.is_company:
+        return redirect('company_profile', name=request.user.username)
+    else:
+        return redirect('/')

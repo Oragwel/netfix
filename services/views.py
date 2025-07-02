@@ -1,5 +1,6 @@
 from users.models import Company
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import Service, ServiceRequest
 from .forms import CreateNewService, RequestServiceForm
@@ -28,6 +29,7 @@ def index(request, id):
 
     return render(request, "services/single_service.html", context)
 
+@login_required
 def create(request):
     # Check if user is authenticated and is a company
     if not request.user.is_authenticated:
@@ -79,6 +81,7 @@ def service_field(request, field):
     return render(request, "services/field.html", {"services": services, "field": field})
 
 
+@login_required
 def request_service(request, id):
     service = get_object_or_404(Service, id=id)  # ✅ Used get_object_or_404() for better error handling
 

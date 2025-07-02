@@ -28,7 +28,7 @@
             {% elif user.is_customer %}
                 <li><a href="/customer/{{ user.username }}">My Profile</a></li>
             {% endif %}
-            <li class="last_navbar"><a href="/logout/">Logout</a></li>
+            <li class="last_navbar"><a href="/register/logout/">Logout ({{ user.username }})</a></li>
         {% else %}
             <li><a href="/register/">Register</a></li>
             <li class="last_navbar"><a href="/register/login/">Login</a></li>
