@@ -9,14 +9,17 @@ def home(request):
 
 
 def customer_profile(request, name):
-    """ Shows customer profile with their service requests """
+    """
+    Customer Profile Display - Shows all customer information (except password)
+    Shows service requests with correct price calculation (2 hours × 10.50 = 21.00)
+    """
     user = get_object_or_404(User, username=name)
     if hasattr(user, 'customer'):
         customer = user.customer
-        service_requests = ServiceRequest.objects.filter(customer=customer).order_by('-request_date')
+        service_requests = ServiceRequest.objects.filter(customer=customer).order_by('-request_date')  # Service requests display
 
-        # Calculate additional statistics
-        total_spent = sum(request.calculated_cost() for request in service_requests)
+        # Calculate statistics for customer profile
+        total_spent = sum(request.calculated_cost() for request in service_requests)  # Price calculation
         unique_companies = service_requests.values('service__company').distinct().count()
         unique_categories = service_requests.values('service__field').distinct().count()
 
@@ -33,15 +36,18 @@ def customer_profile(request, name):
 
 
 def company_profile(request, name):
-    # fetches the company user and all of the services available by it
+    """
+    Company Profile Display - Shows all company information (except password)
+    Shows services created by company as available services
+    """
     user = get_object_or_404(User, username=name)
     if hasattr(user, 'company'):
         company = user.company
-        services = Service.objects.filter(company=company).order_by("-date_created")
+        services = Service.objects.filter(company=company).order_by("-date_created")  # Company services display
         return render(request, 'users/profile.html', {
-            'user': user,
-            'company': company,
-            'services': services
+            'user': user,  # All company information
+            'company': company,  # Company details
+            'services': services  # Available services
         })
     else:
         return render(request, 'users/error.html', {'message': 'User is not a company'})

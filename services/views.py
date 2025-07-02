@@ -5,7 +5,10 @@ from .models import Service, ServiceRequest
 from .forms import CreateNewService, RequestServiceForm
 
 def index(request, id):
-    service = get_object_or_404(Service, id=id)  # ✅ Used get_object_or_404() instead of Service.objects.get() to prevent crashes
+    """
+    Individual Service Page - Displays name, description, field, price per hour, date created, company name
+    """
+    service = get_object_or_404(Service, id=id)  # Individual service page access
 
     # Get other services from the same company (excluding current service)
     other_services = Service.objects.filter(
@@ -18,7 +21,7 @@ def index(request, id):
     ).exclude(id=service.id).order_by('-date_created')[:3]
 
     context = {
-        'service': service,
+        'service': service,  # Service with all required info
         'other_services': other_services,
         'related_services': related_services,
     }
@@ -52,26 +55,27 @@ def create(request):
 
 # Added missing function to get the service list
 def service_list(request):
-    services = Service.objects.all().order_by("-date_created")
+    """All Services Page - Shows every service created by every company"""
+    services = Service.objects.all().order_by("-date_created")  # All services page
     return render(request, "services/list.html", {"services": services})
 
 
 def most_requested_services(request):
-    """Display services ordered by number of requests (most requested first)"""
+    """Most Requested Services Page - Shows most requested services and updates when new requests are made"""
     services = Service.objects.annotate(
         request_count=Count('servicerequest')
-    ).order_by('-request_count', '-date_created')
+    ).order_by('-request_count', '-date_created')  # Most requested ordering
 
     return render(request, "services/most_requested.html", {
-        "services": services,
+        "services": services,  # Updated list with request counts
         "page_title": "Most Requested Services"
     })
 
 
-# Added missing function to get the service field
 def service_field(request, field):
-    field = field.replace("-", " ").title()  # ✅ Convert slug format back to readable text
-    services = Service.objects.filter(field=field)  # ✅ Retrieve services by category
+    """Service Type Pages - Has page for every type of service displaying services of that type"""
+    field = field.replace("-", " ").title()  # Convert slug format back to readable text
+    services = Service.objects.filter(field=field)  # Services by specific type
     return render(request, "services/field.html", {"services": services, "field": field})
 
 

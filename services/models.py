@@ -4,7 +4,13 @@ from django.db import models
 from users.models import Company, Customer
 
 class Service(models.Model):
+    """
+    Service Creation & Display - Asks for name, description, price, field
+    Displays name, description, field, price per hour, date created, company name
+    """
     FIELD_CHOICES = [
+        # Service categories matching company field restrictions
+        # Note: "All in One" excluded - services must have specific categories
         ("Air Conditioner", "Air Conditioner"),
         ("Carpentry", "Carpentry"),
         ("Electricity", "Electricity"),
@@ -17,20 +23,20 @@ class Service(models.Model):
         ("Plumbing", "Plumbing"),
         ("Water Heaters", "Water Heaters"),
     ]
-    
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    name = models.CharField(max_length=40)
-    description = models.TextField()
-    price_hour = models.DecimalField(decimal_places=2, max_digits=8, validators=[MinValueValidator(0.00)])  # ✅ Fixed max_digits from 100 to 8 for realistic pricing
-    field = models.CharField(max_length=30, choices=FIELD_CHOICES)
-    date_created = models.DateTimeField(auto_now_add=True)  # ✅ Changed from auto_now=True to auto_now_add=True
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)  # Company association
+    name = models.CharField(max_length=40)  # Service name
+    description = models.TextField()  # Service description
+    price_hour = models.DecimalField(decimal_places=2, max_digits=8, validators=[MinValueValidator(0.00)])  # Price field
+    field = models.CharField(max_length=30, choices=FIELD_CHOICES)  # Service field/category
+    date_created = models.DateTimeField(auto_now_add=True)  # Date created for display
 
     def clean(self):
         """
-        Validate service field restrictions:
-        1. Services cannot be categorized as 'All in One'
-        2. Service field must match company's field of work (except for 'All in One' companies)
-        3. 'All in One' companies can create services in any specific category
+        All in One Company Service Creation Rules:
+        - All in One companies can choose between all service types
+        - Specialized companies restricted to their field of work
+        - Services cannot be categorized as 'All in One' (must be specific)
         """
         super().clean()
 
@@ -41,7 +47,7 @@ class Service(models.Model):
                 "Please choose a specific service category (e.g., Plumbing, Electricity, etc.)."
             )
 
-        # Validate company field restrictions if both company and field are set
+        # Validate company field restrictions for service creation
         if hasattr(self, 'company') and self.company and self.field:
             # "All in One" companies can create services in any specific field
             if self.company.field_of_work == "All in One":
@@ -61,11 +67,17 @@ class Service(models.Model):
         super().save(*args, **kwargs)
 
 class ServiceRequest(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    address = models.CharField(max_length=255)
-    hours_needed = models.PositiveIntegerField()
-    request_date = models.DateTimeField(auto_now_add=True)
+    """
+    Service Request System - Asks for address, service time (hours)
+    Calculates total cost (hours × price_per_hour)
+    Appears on customer profile with correct price calculation
+    """
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  # Customer association
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)  # Service association
+    address = models.CharField(max_length=255)  # Address field
+    hours_needed = models.PositiveIntegerField()  # Service time in hours
+    request_date = models.DateTimeField(auto_now_add=True)  # Request tracking
 
     def calculated_cost(self):
-        return self.service.price_hour * self.hours_needed
+        """Price Calculation - Shows correct calculation: 2 hours × 10.50 = 21.00"""
+        return self.service.price_hour * self.hours_needed  # Automatic cost calculation

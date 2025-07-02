@@ -23,64 +23,75 @@ def validate_username(value):
 # Removed CustomerRegistrationForm as it's not used and has incorrect fields
         
 class CustomerSignUpForm(UserCreationForm):
-    date_of_birth = forms.DateField(widget=DateInput)  # ✅ Added proper field for capturing customer birthdate
-    email = forms.EmailField()  # ✅ Email field for customer registration
+    """
+    Customer Registration Form - Requests username, email, password, password confirmation, date of birth
+    Implements username and email uniqueness validation
+    """
+    date_of_birth = forms.DateField(widget=DateInput)  # Date of birth field
+    email = forms.EmailField()  # Email field
 
     class Meta:
         model = User
-        fields = ["username", "email", "date_of_birth", "password1", "password2"]
+        fields = ["username", "email", "date_of_birth", "password1", "password2"]  # All 5 required fields
 
     def clean_username(self):
-        """Validate username uniqueness"""
+        """Username uniqueness validation - warns when username already exists"""
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
             raise ValidationError(f"The username '{username}' is already taken. Please choose a different username.")
         return username
 
     def clean_email(self):
-        """Validate email uniqueness"""
+        """Email uniqueness validation - warns when email already exists"""
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise ValidationError(f"The email '{email}' is already registered. Please use a different email.")
         return email
 
     def save(self, commit=True):
+        """Creates Customer user type with proper role assignment"""
         user = super().save(commit=False)
-        user.is_customer = True  # ✅ Ensured correct role assignment for customers
+        user.is_customer = True  # Customer user type
         if commit:
             user.save()
-            Customer.objects.create(user=user, date_of_birth=self.cleaned_data.get('date_of_birth'))  # ✅ Auto-create related Customer instance with date_of_birth
+            Customer.objects.create(user=user, date_of_birth=self.cleaned_data.get('date_of_birth'))  # Store date of birth
         return user
 
 
 class CompanySignUpForm(UserCreationForm):
-    field_of_work = forms.ChoiceField(choices=Company.FIELD_CHOICES)  # ✅ Dynamically loads choices for company specialization
-    email = forms.EmailField()  # ✅ Email field for company registration
+    """
+    Company Registration Form - Requests username, email, password, password confirmation, field of work
+    Field of work restricted to exact 12 predefined values
+    Implements username and email uniqueness validation
+    """
+    field_of_work = forms.ChoiceField(choices=Company.FIELD_CHOICES)  # Field of work with restrictions
+    email = forms.EmailField()  # Email field
 
     class Meta:
         model = User
-        fields = ["username", "email", "field_of_work", "password1", "password2"]
+        fields = ["username", "email", "field_of_work", "password1", "password2"]  # All 5 required fields
 
     def clean_username(self):
-        """Validate username uniqueness"""
+        """Username uniqueness validation - warns when username already exists"""
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
             raise ValidationError(f"The username '{username}' is already taken. Please choose a different username.")
         return username
 
     def clean_email(self):
-        """Validate email uniqueness"""
+        """Email uniqueness validation - warns when email already exists"""
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise ValidationError(f"The email '{email}' is already registered. Please use a different email.")
         return email
 
     def save(self, commit=True):
+        """Creates Company user type with proper role assignment and field of work"""
         user = super().save(commit=False)
-        user.is_company = True  # ✅ Correctly assigns company role upon signup
+        user.is_company = True  # Company user type
         if commit:
             user.save()
-            Company.objects.create(user=user, field_of_work=self.cleaned_data["field_of_work"])  # ✅ Auto-create related Company instance with correct field
+            Company.objects.create(user=user, field_of_work=self.cleaned_data["field_of_work"])  # Store field of work
         return user
 
 

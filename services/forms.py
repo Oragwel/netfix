@@ -6,44 +6,51 @@ from .models import Service, ServiceRequest
 
 
 class CreateNewService(forms.ModelForm):
-    """ Form for companies to create new services """
+    """
+    Service Creation Form - Asks for name, description, price, field
+    Example: electricity Company creating service with price 10.50
+    """
 
     class Meta:
         model = Service
-        fields = ['name', 'description', 'price_hour', 'field']
+        fields = ['name', 'description', 'price_hour', 'field']  # All 4 required fields
         widgets = {
-            'name': forms.TextInput(attrs={
+            'name': forms.TextInput(attrs={  # Service name field
                 'placeholder': 'Enter Service Name',
                 'autocomplete': 'off',
                 'class': 'form-control'
             }),
-            'description': forms.Textarea(attrs={
+            'description': forms.Textarea(attrs={  # Service description field
                 'placeholder': 'Enter Description',
                 'class': 'form-control',
                 'rows': 4
             }),
-            'price_hour': forms.NumberInput(attrs={
+            'price_hour': forms.NumberInput(attrs={  # Price field - supports 10.50 example
                 'placeholder': 'Enter Price per Hour',
                 'class': 'form-control',
                 'step': '0.01',
                 'min': '0.01'
             }),
-            'field': forms.Select(attrs={
+            'field': forms.Select(attrs={  # Service field/category
                 'class': 'form-control'
             })
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        All in One Company Service Creation:
+        - All in One companies can choose between all service types
+        - Specialized companies restricted to their field of work
+        """
         # Extract company from kwargs if provided
         self.company = kwargs.pop('company', None)
         super().__init__(*args, **kwargs)
-        self.fields['price_hour'].validators = [MinValueValidator(0.01)]
+        self.fields['price_hour'].validators = [MinValueValidator(0.01)]  # Price validation for 10.50 example
 
         # Restrict field choices based on company's field of work
         if self.company:
             if self.company.field_of_work == "All in One":
                 # "All in One" companies can create services in any specific field
-                # (All service fields are available since "All in One" is already removed from FIELD_CHOICES)
                 available_choices = Service.FIELD_CHOICES
             else:
                 # Other companies can only create services in their specific field
@@ -95,17 +102,20 @@ class CreateNewService(forms.ModelForm):
 
 
 class RequestServiceForm(forms.ModelForm):
-    """ Form for customers to request a service """
+    """
+    Service Request Form - Asks for address, service time (in hours)
+    Example: Request service with 2 hours interval
+    """
 
     class Meta:
         model = ServiceRequest
-        fields = ['address', 'hours_needed']
+        fields = ['address', 'hours_needed']  # Both required fields
         widgets = {
-            'address': forms.TextInput(attrs={
+            'address': forms.TextInput(attrs={  # Address field
                 'placeholder': 'Enter your address',
                 'class': 'form-control'
             }),
-            'hours_needed': forms.NumberInput(attrs={
+            'hours_needed': forms.NumberInput(attrs={  # Service time in hours
                 'placeholder': 'Number of hours needed',
                 'class': 'form-control',
                 'min': 1
@@ -114,4 +124,4 @@ class RequestServiceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['hours_needed'].validators = [MinValueValidator(1)]
+        self.fields['hours_needed'].validators = [MinValueValidator(1)]  # Hours validation for 2-hour example
