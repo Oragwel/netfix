@@ -30,4 +30,11 @@ Netfix is a web platform designed to connect **customers** with **companies** pr
 - **Caching & Optimization**: Redis (optional)
 - **Authentication**: Django’s built-in system
 
+## Documentation
+
+For detailed technical documentation, see the [docs/](docs/) folder:
+- **[Service Structure](docs/SERVICE_STRUCTURE_SUMMARY.md)** - Service model and field definitions
+- **[Feature Implementation](docs/SERVICE_PAGES_SUMMARY.md)** - Service browsing and request system
+- **[System Architecture](docs/FIELD_RESTRICTIONS_DEMO.md)** - Company restrictions and validation rules
+
 ## Project Structure
