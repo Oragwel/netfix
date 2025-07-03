@@ -137,7 +137,7 @@ NetFix supports 11 comprehensive service categories:
 ### Installation
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://learn.zone01kisumu.ke/git/oragwelr/netfix.git
    cd netfix
    ```
 
