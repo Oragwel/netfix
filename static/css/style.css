@@ -1348,6 +1348,7 @@ span {
   background: rgba(255,255,255,0.1);
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.2);
+  overflow: hidden; /* Prevent content from overflowing the card */
 }
 
 .company-card h3, .action-card h3 {
@@ -1438,6 +1439,7 @@ span {
   font-size: 1.1rem;
   width: 100%;
   margin-bottom: 10px;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
 }
 
 .action-note {
@@ -1445,6 +1447,28 @@ span {
   font-size: 0.9rem;
   text-align: center;
   margin: 10px 0 0 0;
+  line-height: 1.4;
+}
+
+/* Action card specific styling */
+.action-card .btn-large {
+  margin-bottom: 15px;
+}
+
+.action-card .owner-section,
+.action-card .company-note {
+  text-align: center;
+}
+
+.action-card .owner-badge {
+  color: #4CAF50;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.action-card .company-note p {
+  color: #f0f0f0;
+  margin-bottom: 15px;
 }
 
 .owner-section, .company-note, .login-section {
@@ -2683,11 +2707,7 @@ span {
   flex-wrap: wrap;
 }
 
-.btn-large {
-  padding: 15px 30px;
-  font-size: 1.1rem;
-  min-width: 200px;
-}
+/* Removed duplicate .btn-large definition - consolidated above */
 
 .request-info {
   margin-bottom: 30px;
