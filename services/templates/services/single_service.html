@@ -164,8 +164,8 @@
                     {% else %}
                         <div class="login-section">
                             <p class="login-note">Please login to request this service</p>
-                            <a href="/register/login/" class="btn btn-primary">Login</a>
-                            <a href="/register/" class="btn btn-outline">Register</a>
+                            <a href="/register/login/?next={{ request.get_full_path|urlencode }}" class="btn btn-primary">Login</a>
+                            <a href="/register/?next={{ request.get_full_path|urlencode }}" class="btn btn-outline">Register</a>
                         </div>
                     {% endif %}
                 </div>

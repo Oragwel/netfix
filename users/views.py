@@ -26,7 +26,11 @@ class CustomerSignUpView(CreateView):
     def form_valid(self, form):
         """ Saves the new customer and logs them in automatically """
         user = form.save()
-        login(self.request, user) 
+        login(self.request, user)
+        # Check for next parameter to redirect to original page
+        next_url = self.request.POST.get('next') or self.request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
         return redirect('/')
 
 
@@ -45,6 +49,10 @@ class CompanySignUpView(CreateView):
         """ Saves the new company and logs them in automatically """
         user = form.save()
         login(self.request, user)
+        # Check for next parameter to redirect to original page
+        next_url = self.request.POST.get('next') or self.request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
         return redirect('/')
 
 
@@ -63,6 +71,10 @@ def LoginUserView(request):
                 user = authenticate(request, username=user.username, password=password)
                 if user is not None:
                     login(request, user)
+                    # Check for next parameter to redirect to original page
+                    next_url = request.POST.get('next') or request.GET.get('next')
+                    if next_url:
+                        return redirect(next_url)
                     return redirect('/')
                 else:
                     form.add_error('password', 'Invalid password.')
