@@ -40,31 +40,43 @@ def company_profile(request, name):
     """
     Company Profile Display - Shows all company information (except password)
     Shows services created by company as available services
+    Shows customers who have requested their services
     """
     user = get_object_or_404(User, username=name)
     if hasattr(user, 'company'):
         company = user.company
         services = Service.objects.filter(company=company).order_by("-date_created")  # Company services display
 
+        # Get service requests for this company's services
+        service_requests = ServiceRequest.objects.filter(
+            service__company=company
+        ).select_related('customer__user', 'service').order_by('-request_date')
+
         # Calculate additional statistics for enhanced profile
         avg_price = services.aggregate(avg_price=models.Avg('price_hour'))['avg_price'] or 0
         unique_categories = services.values('field').distinct().count()
+        total_requests = service_requests.count()
 
-        # Get total service requests for this company (if ServiceRequest model exists)
-        total_requests = 0
-        try:
-            from services.models import ServiceRequest
-            total_requests = ServiceRequest.objects.filter(service__company=company).count()
-        except:
-            pass  # ServiceRequest model might not exist yet
+        # Calculate total revenue from requests
+        total_revenue = sum(request.calculated_cost() for request in service_requests)
+
+        # Calculate average request value
+        avg_request_value = total_revenue / total_requests if total_requests > 0 else 0
+
+        # Get unique customers who have requested services
+        unique_customers = service_requests.values('customer').distinct().count()
 
         return render(request, 'users/company_profile.html', {
             'user': user,  # All company information
             'company': company,  # Company details
             'services': services,  # Available services
+            'service_requests': service_requests,  # Service requests from customers
             'avg_price': avg_price,  # Average price per hour
             'unique_categories': unique_categories,  # Number of different service categories
             'total_requests': total_requests,  # Total service requests received
+            'total_revenue': total_revenue,  # Total revenue from requests
+            'avg_request_value': avg_request_value,  # Average value per request
+            'unique_customers': unique_customers,  # Number of unique customers
         })
     else:
         return render(request, 'users/error.html', {'message': 'User is not a company'})

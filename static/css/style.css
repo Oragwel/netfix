@@ -2791,4 +2791,212 @@ span {
   }
 }
 
+/* ======================================== Service Requests Section ======================================== */
+
+.service-requests-section {
+  margin-bottom: 40px;
+}
+
+.requests-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.requests-header h2 {
+  color: #4fc3f7;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.requests-subtitle {
+  color: #b3e5fc;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.requests-summary {
+  margin-bottom: 30px;
+}
+
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.request-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 25px;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.request-card:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.request-customer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.customer-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #1e90ff, #4fc3f7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.customer-info h4 {
+  color: #4fc3f7;
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+}
+
+.customer-email {
+  color: #b3e5fc;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.request-details {
+  margin-bottom: 20px;
+}
+
+.request-service h5 {
+  color: #4fc3f7;
+  margin: 0 0 5px 0;
+  font-size: 1.3rem;
+}
+
+.service-category {
+  color: #b3e5fc;
+  margin: 0 0 15px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.request-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.request-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-label {
+  color: #b3e5fc;
+  font-size: 0.9rem;
+  min-width: 100px;
+}
+
+.info-value {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.request-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.no-requests {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  border: 2px dashed rgba(255,255,255,0.2);
+}
+
+.no-requests-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.no-requests h3 {
+  color: #4fc3f7;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.no-requests p {
+  color: #b3e5fc;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
+
+.no-requests-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Responsive Design for Service Requests */
+@media (max-width: 768px) {
+  .request-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .request-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .request-actions {
+    justify-content: center;
+  }
+
+  .no-requests-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 /* ============================================================================================== */

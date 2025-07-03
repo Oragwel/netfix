@@ -141,6 +141,14 @@
                             <h4>{{ total_requests|default:0 }}</h4>
                             <p>Total Requests</p>
                         </div>
+                        <div class="summary-card">
+                            <h4>${{ total_revenue|floatformat:2|default:"0.00" }}</h4>
+                            <p>Total Revenue</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>{{ unique_customers|default:0 }}</h4>
+                            <p>Unique Customers</p>
+                        </div>
                     </div>
                 </div>
 
@@ -216,6 +224,102 @@
                 </div>
             {% endif %}
         </div>
+
+        <!-- Service Requests from Customers -->
+        {% if user == request.user %}
+        <div class="service-requests-section">
+            <div class="requests-header">
+                <h2>Customer Service Requests</h2>
+                <p class="requests-subtitle">Customers who have requested your services</p>
+            </div>
+
+            {% if service_requests %}
+                <div class="requests-summary">
+                    <div class="summary-stats">
+                        <div class="summary-card">
+                            <h4>{{ service_requests.count }}</h4>
+                            <p>Total Requests</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>${{ total_revenue|floatformat:2 }}</h4>
+                            <p>Total Revenue</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>{{ unique_customers }}</h4>
+                            <p>Unique Customers</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>${{ avg_request_value|floatformat:2|default:"0.00" }}</h4>
+                            <p>Avg. Request Value</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="requests-list">
+                    {% for request in service_requests %}
+                        <div class="request-card">
+                            <div class="request-header">
+                                <div class="request-customer">
+                                    <div class="customer-avatar">
+                                        <span class="customer-initial">{{ request.customer.user.username|first|upper }}</span>
+                                    </div>
+                                    <div class="customer-info">
+                                        <h4>{{ request.customer.user.username }}</h4>
+                                        <p class="customer-email">{{ request.customer.user.email }}</p>
+                                    </div>
+                                </div>
+                                <div class="request-status">
+                                    <span class="status-badge status-pending">Pending</span>
+                                </div>
+                            </div>
+
+                            <div class="request-details">
+                                <div class="request-service">
+                                    <h5>{{ request.service.name }}</h5>
+                                    <p class="service-category">{{ request.service.field }}</p>
+                                </div>
+
+                                <div class="request-info-grid">
+                                    <div class="request-info-item">
+                                        <span class="info-label">📍 Address:</span>
+                                        <span class="info-value">{{ request.address }}</span>
+                                    </div>
+                                    <div class="request-info-item">
+                                        <span class="info-label">⏱️ Duration:</span>
+                                        <span class="info-value">{{ request.hours_needed }} hour{{ request.hours_needed|pluralize }}</span>
+                                    </div>
+                                    <div class="request-info-item">
+                                        <span class="info-label">💰 Total Cost:</span>
+                                        <span class="info-value">${{ request.calculated_cost|floatformat:2 }}</span>
+                                    </div>
+                                    <div class="request-info-item">
+                                        <span class="info-label">📅 Requested:</span>
+                                        <span class="info-value">{{ request.request_date|date:"M d, Y" }} ({{ request.request_date|timesince }} ago)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="request-actions">
+                                <a href="/customer/{{ request.customer.user.username }}" class="btn btn-outline btn-sm">👤 View Customer</a>
+                                <a href="/services/{{ request.service.id }}/" class="btn btn-outline btn-sm">🔧 View Service</a>
+                                <button class="btn btn-primary btn-sm">📞 Contact Customer</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-requests">
+                    <div class="no-requests-icon">📋</div>
+                    <h3>No Service Requests Yet</h3>
+                    <p>You haven't received any service requests from customers yet.</p>
+                    <div class="no-requests-actions">
+                        <a href="/services/create/" class="btn btn-primary">Create More Services</a>
+                        <a href="/services/" class="btn btn-outline">Browse All Services</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
 
         <!-- Profile Actions -->
         <div class="profile-actions">
