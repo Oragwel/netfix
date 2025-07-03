@@ -19,8 +19,8 @@
                         <span class="stat-label">Service{{ service_requests.count|pluralize }} Requested</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">{{ user.date_joined|timesince|truncatewords:1 }}</span>
-                        <span class="stat-label">Member</span>
+                        <span class="stat-number">{{ user.date_joined|timesince|truncatewords:2 }} ago</span>
+                        <span class="stat-label">Member Since</span>
                     </div>
                     {% if service_requests %}
                     <div class="stat-item">
