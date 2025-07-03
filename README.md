@@ -193,8 +193,8 @@ The application includes comprehensive tests for:
 ## 👨‍💻 Author
 
 **Otieno Ragwel Rogers**
-- GitHub: [@oragwelr](https://github.com/oragwelr)
-- Email: developer@netfix.com
+- GitHub: [@Oragwel](https://github.com/Oragwel)
+- Email: tidings@outlok.com
 
 ## 🤝 Contributing
 
@@ -221,7 +221,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 ## 📞 Support
 
-For support, email developer@netfix.com or create an issue in the repository.
+For support, email tidings@outlook.com or create an issue in the repository.
 
 ---
 
