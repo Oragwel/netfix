@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.db import models
 
 from users.models import User, Company, Customer
 from services.models import Service, ServiceRequest
@@ -44,10 +45,26 @@ def company_profile(request, name):
     if hasattr(user, 'company'):
         company = user.company
         services = Service.objects.filter(company=company).order_by("-date_created")  # Company services display
-        return render(request, 'users/profile.html', {
+
+        # Calculate additional statistics for enhanced profile
+        avg_price = services.aggregate(avg_price=models.Avg('price_hour'))['avg_price'] or 0
+        unique_categories = services.values('field').distinct().count()
+
+        # Get total service requests for this company (if ServiceRequest model exists)
+        total_requests = 0
+        try:
+            from services.models import ServiceRequest
+            total_requests = ServiceRequest.objects.filter(service__company=company).count()
+        except:
+            pass  # ServiceRequest model might not exist yet
+
+        return render(request, 'users/company_profile.html', {
             'user': user,  # All company information
             'company': company,  # Company details
-            'services': services  # Available services
+            'services': services,  # Available services
+            'avg_price': avg_price,  # Average price per hour
+            'unique_categories': unique_categories,  # Number of different service categories
+            'total_requests': total_requests,  # Total service requests received
         })
     else:
         return render(request, 'users/error.html', {'message': 'User is not a company'})

@@ -1,0 +1,233 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    {{ user.username }} - Company Profile | NetFix
+{% endblock %}
+
+{% block content %}
+    <div class="company-profile-container">
+        <!-- Profile Header -->
+        <div class="company-profile-header">
+            <div class="company-avatar">
+                <span class="company-initial">{{ user.username|first|upper }}</span>
+            </div>
+            <div class="company-info">
+                <h1>{{ user.username }}</h1>
+                <p class="company-type">🏢 Service Provider</p>
+                <div class="company-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ services.count }}</span>
+                        <span class="stat-label">Service{{ services.count|pluralize }} Offered</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ user.date_joined|timesince|truncatewords:1 }}</span>
+                        <span class="stat-label">Member</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">
+                            {% if company.rating > 0 %}
+                                {{ company.rating }}/5
+                            {% else %}
+                                New
+                            {% endif %}
+                        </span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Information -->
+        <div class="company-account-info">
+            <h2>Company Information</h2>
+            <div class="account-info-grid">
+                <div class="info-card">
+                    <div class="info-icon">🏢</div>
+                    <div class="info-content">
+                        <h4>Company Name</h4>
+                        <p>{{ user.username }}</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📧</div>
+                    <div class="info-content">
+                        <h4>Email</h4>
+                        <p>{{ user.email }}</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">🔧</div>
+                    <div class="info-content">
+                        <h4>Specialization</h4>
+                        <p>
+                            {% if company.field_of_work == "All in One" %}
+                                <span class="specialization-highlight">{{ company.field_of_work }}</span>
+                            {% else %}
+                                {{ company.field_of_work }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📅</div>
+                    <div class="info-content">
+                        <h4>Member Since</h4>
+                        <p>{{ user.date_joined|date:"F d, Y" }}</p>
+                        <small>{{ user.date_joined|timesince }} ago</small>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">⭐</div>
+                    <div class="info-content">
+                        <h4>Rating</h4>
+                        <p>
+                            {% if company.rating > 0 %}
+                                <span class="rating-stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= company.rating %}
+                                            ⭐
+                                        {% else %}
+                                            ☆
+                                        {% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="rating-text">{{ company.rating }}/5</span>
+                            {% else %}
+                                <span class="no-rating">Not rated yet</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">🔢</div>
+                    <div class="info-content">
+                        <h4>Total Services</h4>
+                        <p>{{ services.count }} service{{ services.count|pluralize }}</p>
+                        {% if services %}
+                            <small>Latest: {{ services.first.date_created|date:"M d, Y" }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Offered -->
+        <div class="company-services-section">
+            <div class="services-header">
+                <h2>Our Services</h2>
+                <p class="services-subtitle">Professional home services offered by {{ user.username }}</p>
+            </div>
+
+            {% if services %}
+                <div class="services-summary">
+                    <div class="summary-stats">
+                        <div class="summary-card">
+                            <h4>{{ services.count }}</h4>
+                            <p>Total Services</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>${{ avg_price|floatformat:2|default:"0.00" }}</h4>
+                            <p>Avg. Price/Hour</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>{{ unique_categories|default:1 }}</h4>
+                            <p>Service Categories</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>{{ total_requests|default:0 }}</h4>
+                            <p>Total Requests</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="services-list">
+                    {% for service in services %}
+                        <div class="service-card">
+                            <div class="service-header">
+                                <div class="service-title">
+                                    <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                                    <span class="service-category">{{ service.field }}</span>
+                                </div>
+                                <div class="service-price">
+                                    <span class="price-amount">${{ service.price_hour }}</span>
+                                    <small class="price-unit">per hour</small>
+                                </div>
+                            </div>
+
+                            <div class="service-details">
+                                <div class="service-description">
+                                    <p>{{ service.description|truncatewords:25 }}</p>
+                                </div>
+                                
+                                <div class="service-meta">
+                                    <div class="meta-item">
+                                        <div class="meta-icon">🏷️</div>
+                                        <div class="meta-content">
+                                            <label>Category</label>
+                                            <p>{{ service.field }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="meta-item">
+                                        <div class="meta-icon">💰</div>
+                                        <div class="meta-content">
+                                            <label>Price per Hour</label>
+                                            <p class="price-highlight">${{ service.price_hour }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="meta-item">
+                                        <div class="meta-icon">📅</div>
+                                        <div class="meta-content">
+                                            <label>Created</label>
+                                            <p>{{ service.date_created|date:"M d, Y" }}</p>
+                                            <small>{{ service.date_created|timesince }} ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="service-actions">
+                                <a href="/services/{{ service.id }}" class="btn btn-outline">View Details</a>
+                                <a href="/services/{{ service.id }}/request_service/" class="btn btn-secondary">Request Service</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-services">
+                    <div class="no-services-icon">🔧</div>
+                    <h3>No Services Created Yet</h3>
+                    <p>This company hasn't created any services yet. Check back later!</p>
+                    {% if user == request.user %}
+                        <div class="no-services-actions">
+                            <a href="/services/create/" class="btn btn-primary">Create Your First Service</a>
+                            <a href="/services/" class="btn btn-outline">Browse Other Services</a>
+                        </div>
+                    {% else %}
+                        <div class="no-services-actions">
+                            <a href="/services/" class="btn btn-primary">Browse All Services</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Profile Actions -->
+        <div class="profile-actions">
+            <div class="action-buttons">
+                {% if user == request.user %}
+                    <a href="/services/create/" class="btn btn-primary">➕ Create New Service</a>
+                {% endif %}
+                <a href="/services/" class="btn btn-outline">🔍 Browse All Services</a>
+                {% if user == request.user %}
+                    <a href="/logout/" class="btn btn-secondary">🚪 Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -2088,6 +2088,306 @@ span {
   }
 }
 
+/* ======================================== Company Profile ======================================== */
+
+.company-profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.company-profile-header {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 30px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.company-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+}
+
+.company-initial {
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.company-info h1 {
+  color: #fff;
+  margin: 0 0 5px 0;
+  font-size: 2.2rem;
+}
+
+.company-type {
+  color: #f0f0f0;
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+}
+
+.company-stats {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.company-account-info {
+  margin-bottom: 40px;
+}
+
+.company-account-info h2 {
+  color: #fff;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.specialization-highlight {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.company-services-section {
+  margin-bottom: 40px;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.services-header h2 {
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.services-subtitle {
+  color: #f0f0f0;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.services-summary {
+  margin-bottom: 30px;
+}
+
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.service-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 25px;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.service-card:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.service-title h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.4rem;
+}
+
+.service-title h3 a {
+  color: #4fc3f7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.service-title h3 a:hover {
+  color: #29b6f6;
+  text-decoration: underline;
+}
+
+.service-category {
+  background: rgba(79, 195, 247, 0.2);
+  color: #4fc3f7;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.service-price {
+  text-align: right;
+}
+
+.price-amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.price-unit {
+  display: block;
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.service-description {
+  margin-bottom: 20px;
+}
+
+.service-description p {
+  color: #f0f0f0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.service-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.meta-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.meta-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.meta-content label {
+  display: block;
+  color: #ccc;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-content p {
+  color: #fff;
+  margin: 0;
+  font-weight: 500;
+}
+
+.meta-content small {
+  color: #bbb;
+  font-size: 0.8rem;
+}
+
+.price-highlight {
+  color: #4CAF50 !important;
+  font-weight: bold;
+}
+
+.service-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.no-services {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  border: 2px dashed rgba(255,255,255,0.2);
+}
+
+.no-services-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.no-services h3 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.no-services p {
+  color: #ccc;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+.no-services-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Responsive Design for Company Profile */
+@media (max-width: 768px) {
+  .company-profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .company-stats {
+    justify-content: center;
+  }
+
+  .service-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .service-price {
+    text-align: left;
+  }
+
+  .service-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .service-actions {
+    justify-content: center;
+  }
+
+  .no-services-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 /* ======================================== Service Request Page ======================================== */
 
 .request-service-container {
