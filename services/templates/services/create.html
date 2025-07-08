@@ -1,74 +1,194 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    Create New Service
+    Create New Service - {{ company.user.username }} | NetFix
 {% endblock %}
 
 {% block content %}
-    <div class="create-service-container">
-        <h1>Create New Service</h1>
+    <div class="request-service-container">
+        <!-- Page Header -->
+        <div class="request-header">
+            <h1>Create New Service</h1>
+            <p class="request-subtitle">Add a new service to your company portfolio</p>
+        </div>
 
         {% if user.is_company %}
-            <div class="company-info-banner">
-                <h3>Company: {{ company.user.username }}</h3>
-                <p><strong>Specialization:</strong> {{ company.field_of_work }}</p>
-                {% if company.field_of_work == "All in One" %}
-                    <p class="info-text">As an "All in One" company, you can create services in any category.</p>
-                {% else %}
-                    <p class="info-text">You can only create services in the {{ company.field_of_work }} category.</p>
-                {% endif %}
+            <!-- Company Summary Card -->
+            <div class="request-form-card">
+                <div class="form-header">
+                    <h2>Company Information</h2>
+                    <p>Your company details and service creation permissions</p>
+                </div>
+
+                <div class="company-info-content">
+                    <div class="company-profile">
+                        <div class="provider-avatar">
+                            <span class="provider-initial">{{ company.user.username|first|upper }}</span>
+                        </div>
+                        <div class="company-details">
+                            <h3>{{ company.user.username }}</h3>
+                            <p class="company-specialization">{{ company.field_of_work }} Specialist</p>
+                            <div class="company-rating">
+                                {% if company.rating > 0 %}
+                                    <span class="rating-stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= company.rating %}⭐{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <span class="rating-text">{{ company.rating }}/5 Rating</span>
+                                {% else %}
+                                    <span class="no-rating">⭐ Not rated yet</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="company-badge">
+                            <span class="service-category">{{ company.field_of_work }}</span>
+                        </div>
+                    </div>
+
+                    <div class="company-permissions">
+                        {% if company.field_of_work == "All in One" %}
+                            <div class="permission-info all-categories">
+                                <span class="permission-icon">✨</span>
+                                <div class="permission-text">
+                                    <h4>All Categories Available</h4>
+                                    <p>As an "All in One" company, you can create services in any category.</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="permission-info limited-category">
+                                <span class="permission-icon">📋</span>
+                                <div class="permission-text">
+                                    <h4>Category Restriction</h4>
+                                    <p>You can only create services in the {{ company.field_of_work }} category.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
 
-            <form method="post">
-                {% csrf_token %}
-                
-                <div class="form-group">
-                    <label for="{{ form.name.id_for_label }}">Service Name:</label>
-                    {{ form.name }}
-                    {% if form.name.errors %}
-                        <div class="error">{{ form.name.errors }}</div>
-                    {% endif %}
+            <!-- Service Creation Form -->
+            <div class="request-form-card">
+                <div class="form-header">
+                    <h2>Service Details</h2>
+                    <p>Fill out the information below to create your new service</p>
                 </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.description.id_for_label }}">Description:</label>
-                    {{ form.description }}
-                    {% if form.description.errors %}
-                        <div class="error">{{ form.description.errors }}</div>
+
+                <form method="post" class="request-form">
+                    {% csrf_token %}
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">
+                                <span class="label-icon">🏷️</span>
+                                Service Name
+                            </label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="form-error">{{ form.name.errors }}</div>
+                            {% endif %}
+                            <small class="form-help">Choose a clear, descriptive name for your service</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">
+                                <span class="label-icon">📝</span>
+                                Service Description
+                            </label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="form-error">{{ form.description.errors }}</div>
+                            {% endif %}
+                            <small class="form-help">Provide a detailed description of what your service includes</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.price_hour.id_for_label }}" class="form-label">
+                                <span class="label-icon">💰</span>
+                                Hourly Rate
+                            </label>
+                            {{ form.price_hour }}
+                            {% if form.price_hour.errors %}
+                                <div class="form-error">{{ form.price_hour.errors }}</div>
+                            {% endif %}
+                            <small class="form-help">Set your competitive hourly rate in USD</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.field.id_for_label }}" class="form-label">
+                                <span class="label-icon">📂</span>
+                                Service Category
+                            </label>
+                            {{ form.field }}
+                            {% if form.field.help_text %}
+                                <small class="form-help">{{ form.field.help_text }}</small>
+                            {% endif %}
+                            {% if form.field.errors %}
+                                <div class="form-error">{{ form.field.errors }}</div>
+                            {% endif %}
+                            <small class="form-help">Select the category that best describes your service</small>
+                        </div>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="form-error">{{ form.non_field_errors }}</div>
                     {% endif %}
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            ✨ Create Service
+                        </button>
+                        <a href="/services/" class="btn btn-outline">
+                            ← Back to Services
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="request-info">
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-icon">ℹ️</div>
+                        <div class="info-content">
+                            <h4>What happens next?</h4>
+                            <p>After creating your service, it will be visible to customers who can then request it from your company.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">💼</div>
+                        <div class="info-content">
+                            <h4>Service Management</h4>
+                            <p>You can edit or delete your services anytime from your company profile page.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">📈</div>
+                        <div class="info-content">
+                            <h4>Pricing Strategy</h4>
+                            <p>Set competitive rates to attract customers while ensuring fair compensation for your expertise.</p>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.price_hour.id_for_label }}">Price per Hour ($):</label>
-                    {{ form.price_hour }}
-                    {% if form.price_hour.errors %}
-                        <div class="error">{{ form.price_hour.errors }}</div>
-                    {% endif %}
-                </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.field.id_for_label }}">Service Category:</label>
-                    {{ form.field }}
-                    {% if form.field.help_text %}
-                        <small class="help-text">{{ form.field.help_text }}</small>
-                    {% endif %}
-                    {% if form.field.errors %}
-                        <div class="error">{{ form.field.errors }}</div>
-                    {% endif %}
-                </div>
-                
-                {% if form.non_field_errors %}
-                    <div class="error">{{ form.non_field_errors }}</div>
-                {% endif %}
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Create Service</button>
-                    <a href="/services/" class="btn btn-secondary">Cancel</a>
-                </div>
-            </form>
+            </div>
+
         {% else %}
-            <div class="error-message">
-                <p>Only companies can create services. Please register as a company to create services.</p>
-                <a href="/register/" class="btn btn-primary">Register as Company</a>
+            <div class="request-form-card">
+                <div class="form-header">
+                    <div class="access-denied-icon">🚫</div>
+                    <h2>Access Restricted</h2>
+                    <p>Only registered companies can create services. Please register as a company to start offering your services.</p>
+                </div>
+                <div class="form-actions">
+                    <a href="/register/" class="btn btn-primary btn-large">
+                        🏢 Register as Company
+                    </a>
+                    <a href="/services/" class="btn btn-outline">
+                        ← Browse Services
+                    </a>
+                </div>
             </div>
         {% endif %}
     </div>
